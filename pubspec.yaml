@@ -1,0 +1,39 @@
+name: flutflix
+description: A new Flutter project.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.5 <4.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  google_fonts: ^5.1.0
+  http: ^1.1.0
+  carousel_slider: ^4.2.1
+  dio: ^5.4.0
+  retrofit: ^4.0.1
+  json_annotation: ^4.8.1
+  isar: ^3.1.0
+  isar_flutter_libs: ^3.1.0
+  path_provider: ^2.1.2
+  get: ^4.6.6
+  cached_network_image: ^3.3.1
+  share_plus: ^7.2.1
+  uni_links: ^0.5.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  retrofit_generator: ^8.0.2
+  build_runner: ^2.4.9
+  json_serializable: ^6.7.1
+  isar_generator: ^3.1.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
