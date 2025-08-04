@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "677036985959",
+    "project_id": "flutflix-inshort",
+    "storage_bucket": "flutflix-inshort.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677036985959:android:4b893fd47f73a07cdf8ec2",
+        "android_client_info": {
+          "package_name": "com.example.flutflix"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAq0dVGX3SJChwCRQl4suyfWY0y95sm8Gc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

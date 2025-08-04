@@ -25,56 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _initDeepLinks();
-  }
-
-  void _initDeepLinks() async {
-    try {
-      final initialLink = await getInitialLink();
-      _handleDeepLink(initialLink);
-
-      linkStream.listen((String? link) {
-        _handleDeepLink(link);
-      });
-    } on PlatformException {
-      // Handle error
-    }
-  }
-
-  void _handleDeepLink(String? link) async {
-    if (link == null) return;
-
-    final uri = Uri.parse(link);
-
-    // Example: flutflix://movie/12345
-    if (uri.scheme == 'flutflix' && uri.host == 'movie') {
-      final movieId = uri.pathSegments.isNotEmpty ? uri.pathSegments[0] : null;
-      if (movieId == null) return;
-
-      final allMovies = [
-        ...controller.trendingMovies,
-        ...controller.nowPlayingMovies,
-        ...controller.bookmarkedMovies,
-      ];
-
-      final matchedMovie = allMovies
-          .firstWhereOrNull((movie) => movie.movieId.toString() == movieId);
-
-      if (matchedMovie != null) {
-        Get.to(() => DetailsScreen(movie: matchedMovie));
-      } else {
-        // 🔍 Try to fetch from Isar DB
-        final isar = Isar.getInstance(); // or your custom getter
-        final localMovie =
-            await isar!.movies.filter().movieIdEqualTo(movieId).findFirst();
-
-        if (localMovie != null) {
-          Get.to(() => DetailsScreen(movie: localMovie));
-        } else {
-          Get.snackbar("Movie Not Found", "Couldn't open the shared movie.");
-        }
-      }
-    }
   }
 
   @override

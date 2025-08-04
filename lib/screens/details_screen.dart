@@ -40,7 +40,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   Icons.share,
                 ),
                 onPressed: () {
-                  final deepLink = 'flutflix://movie/${widget.movie.movieId}';
+                  final deepLink =
+                      'https://flutflix.com/movie/${widget.movie.movieId}';
                   final message =
                       '${widget.movie.title}\n\nCheck out this movie!\n$deepLink';
                   Share.share(message);
@@ -74,8 +75,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   bottomRight: Radius.circular(24),
                 ),
                 child: CachedNetworkImage(
-                  imageUrl: widget.movie.posterPath != null &&
-                          widget.movie.posterPath.isNotEmpty
+                  imageUrl: widget.movie.posterPath.isNotEmpty
                       ? '${Constants.imagePath}${widget.movie.posterPath}'
                       : '',
                   fit: BoxFit.cover,

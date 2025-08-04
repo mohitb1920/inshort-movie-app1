@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutflix/models/bookmarked_movie.dart';
+import 'package:flutflix/screens/details_screen.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:uni_links/uni_links.dart';
 
 import '../api/tmdb_api_service.dart';
 import '../constants.dart';
@@ -22,7 +25,6 @@ class HomeScreenController extends GetxController {
   TextEditingController searchTextController = TextEditingController();
   Timer? debounce;
 
-
   @override
   void onInit() async {
     super.onInit();
@@ -31,6 +33,7 @@ class HomeScreenController extends GetxController {
       fetchNowPlayingMovies();
     });
     await loadBookmarkedMovies();
+    _initDeepLinks();
   }
 
   Future<void> _initDb() async {
@@ -123,6 +126,50 @@ class HomeScreenController extends GetxController {
     } catch (e) {
       print("Error during search: $e");
       searchMovieList.clear();
+    }
+  }
+
+  void _initDeepLinks() async {
+    try {
+      final initialLink = await getInitialLink();
+      _handleDeepLink(initialLink);
+
+      linkStream.listen((String? link) {
+        _handleDeepLink(link);
+      });
+    } on PlatformException {
+      // Handle error
+    }
+  }
+
+  void _handleDeepLink(String? link) async {
+    if (link == null) return;
+
+    final uri = Uri.parse(link);
+    if (uri.scheme == 'https' && uri.host == 'flutflix.com') {
+      final movieId = uri.pathSegments.length > 1 ? uri.pathSegments[1] : null;
+      if (movieId == null) return;
+
+      final allMovies = [
+        ...trendingMovies,
+        ...nowPlayingMovies,
+        ...bookmarkedMovies,
+      ];
+
+      final matchedMovie = allMovies
+          .firstWhereOrNull((movie) => movie.movieId.toString() == movieId);
+
+      if (matchedMovie != null) {
+        Get.to(() => DetailsScreen(movie: matchedMovie));
+      } else {
+        final localMovie =
+            await _isar.movies.filter().movieIdEqualTo(movieId).findFirst();
+        if (localMovie != null) {
+          Get.to(() => DetailsScreen(movie: localMovie));
+        } else {
+          Get.snackbar("Movie Not Found", "Couldn't open the shared movie.");
+        }
+      }
     }
   }
 }
